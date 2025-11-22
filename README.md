@@ -76,43 +76,25 @@ Issue: APS requires short-lived access tokens.
 Solution: Created an AWS Lambda /auth/token endpoint to fetch fresh tokens securely, without exposing secrets on the client.
 
 
+
 Bonus future implementation
 
 If expanded into a production-scale system:
 
-1. Asynchronous Ingestion Pipeline
-
-Instead of running ingestion in the browser, CAD files would be uploaded to S3, triggering an SQS + Lambda pipeline that:
-
-Renders snapshots
-
-Generates descriptions
-
-Creates embeddings
-
-Stores metadata
-
-All fully async and fault-tolerant.
+1. Asynchronous Ingestion Pipeline: Instead of running ingestion in the browser, CAD files would be uploaded to S3, triggering an SQS + Lambda pipeline that:Renders snapshots, Generates descriptions, Creates embeddings,Stores metadata
 
 2. Hybrid Data Storage
-
 Vectors: Pinecone
-
 Metadata: DynamoDB or PostgreSQL
 This reduces cost and improves query flexibility.
 
 3. Metadata-Based Pre-Filtering
-
 Before vector search, filter candidates by part category to reduce search space and speed up queries.
 
 📱 Mobile UX for Field Technicians
 
 To make the tool practical for on-site usage:
-
-PWA support for offline-first behavior
-
 Direct camera capture using capture="environment"
-
 Offline caching of recent or commonly used parts
 
 Touch-friendly UI layout

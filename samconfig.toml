@@ -1,0 +1,13 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "visual-search-app"
+s3_bucket = "vis-part-search-artifacts"
+resolve_s3 = false
+
+region = "ap-south-1"
+confirm_changeset = true
+parameter_overrides = "GeminiApiKey=\"\" PineconeApiKey=\"\" PineconeIndex=\"\" AutodeskClientId=\"\" AutodeskClientSecret=\"\""
+image_repositories = []
+
+
+capabilities = "CAPABILITY_IAM"

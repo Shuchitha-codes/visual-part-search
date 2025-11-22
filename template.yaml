@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Visual Part Search System (Prototype)
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs18.x
+    Environment:
+      Variables:
+        GEMINI_API_KEY: !Ref GeminiApiKey
+        PINECONE_API_KEY: !Ref PineconeApiKey
+        PINECONE_INDEX: !Ref PineconeIndex
+        AUTODESK_CLIENT_ID: !Ref AutodeskClientId
+        AUTODESK_CLIENT_SECRET: !Ref AutodeskClientSecret
+
+Parameters:
+  GeminiApiKey:
+    Type: String
+  PineconeApiKey:
+    Type: String
+  PineconeIndex:
+    Type: String
+  AutodeskClientId:
+    Type: String
+  AutodeskClientSecret:
+    Type: String
+
+Resources:
+  VisualSearchApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,GET,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: "'*'"
+
+  GetAutodeskTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/auth/
+      Handler: app.handler
+      Events:
+        ApiEvent: { Type: Api, Properties: { RestApiId: !Ref VisualSearchApi, Path: /auth/token, Method: get } }
+
+  IngestPartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/ingest/
+      Handler: app.handler
+      Events:
+        ApiEvent: { Type: Api, Properties: { RestApiId: !Ref VisualSearchApi, Path: /parts/ingest, Method: post } }
+
+  SearchPartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/search/
+      Handler: app.handler
+      Events:
+        ApiEvent: { Type: Api, Properties: { RestApiId: !Ref VisualSearchApi, Path: /parts/search, Method: post } }
+
+Outputs:
+  ApiEndpoint:
+    Value: !Sub "https://${VisualSearchApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

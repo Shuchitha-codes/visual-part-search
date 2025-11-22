@@ -1,0 +1,9 @@
+{
+  "name": "search-function",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "@google/genai": "*",
+    "@pinecone-database/pinecone": "^2.0.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Visual Part Identify",
+  "description": "A visual search system for mechanical parts using 3D rendering, Generative AI description, and Vector Similarity search.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
